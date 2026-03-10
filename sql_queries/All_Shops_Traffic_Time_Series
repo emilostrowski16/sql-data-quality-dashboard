@@ -1,0 +1,8 @@
+SELECT
+  (day::timestamp + interval '12 hours') AS "time",
+  shop,
+  entries_in
+FROM public.daily_entries
+WHERE day <= (CURRENT_DATE - INTERVAL '1 day')::date
+  AND quality_status IN ('OK','ZERO','PARTIAL','WARN_SPIKE','WARN_HIGH')
+ORDER BY day, shop;
