@@ -1,0 +1,19 @@
+WITH params AS (
+  SELECT (CURRENT_DATE - INTERVAL '1 day')::date AS report_day
+),
+shops AS (
+  SELECT unnest(ARRAY[
+    'Store_01', 'Store_02', 'Store_03', 'Store_04',
+    'Store_05', 'Store_06', 'Store_07', 'Store_08',
+  ]) AS shop_name
+)
+SELECT
+  s.shop_name,
+  COALESCE(d.entries_in, 0) AS daily_entries,
+  COALESCE(d.quality_status, 'NO_ROW') AS quality_status
+FROM shops s
+CROSS JOIN params p
+LEFT JOIN public.daily_entries d
+  ON d.shop = s.shop_name
+ AND d.day = p.report_day
+ORDER BY daily_entries DESC, s.shop_name;
