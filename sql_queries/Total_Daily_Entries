@@ -1,0 +1,4 @@
+SELECT
+  COALESCE(SUM(entries_in), 0) AS value
+FROM public.daily_entries
+WHERE day = (CURRENT_DATE - INTERVAL '1 day')::date;
